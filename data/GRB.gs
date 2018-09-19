@@ -9,9 +9,10 @@ uniform float uv_simulationtimeSeconds;
 uniform float eventTime;
 uniform float GRBrad;
 uniform float GRBspeed;
+uniform float GRBMaxT;
 
 out vec2 texcoord;
-out vec3 color;
+out vec4 color;
 
 
 // axis should be normalized
@@ -54,7 +55,8 @@ void drawSprite(vec4 position, float radius, float rotation)
 void main()
 {
 
-	color = vec3(0,1,0);
+	float alpha = clamp((GRBMaxT - eventTime)/GRBMaxT, 0, 1.);
+	color = vec4(0,1,0, alpha);
 	vec4 pos = vec4(gl_in[0].gl_Position.x, gl_in[0].gl_Position.y, gl_in[0].gl_Position.z,1.); 
 	if (eventTime > 0){
 		pos[0] += gl_in[1].gl_Position.x*eventTime*GRBspeed;
