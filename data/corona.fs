@@ -5,7 +5,6 @@ in vec2 texcoord;
 in vec4 color;
 
 in float fstarNum;
-
 out vec4 fragColor;
 
 //from https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
@@ -70,38 +69,28 @@ void main()
 	fragColor = color;
 	vec2 fromCenter = texcoord * 2 - vec2(1);
 	float dist = dot(fromCenter,fromCenter);
+	float angle = atan((texcoord.x - 0.5)*2., (texcoord.y - 0.5)*2.);
+
 	float u = 1.;
 	float Rstar2 = 1.0;
 	float brightness = (1. - u*(1. - sqrt((Rstar2 - dist)/Rstar2)));
 	fragColor.a *= uv_fade;
 
 	vec3 cameraPosition = (uv_modelViewInverseMatrix * vec4(0, 0, 0, 1)).xyz;
+
 	vec3 cNorm = normalize(cameraPosition);
+	vec3 pNorm = vec3(angle, 0., fstarNum);
 
-	//noise
-	vec3 pNorm = 10.*vec3(texcoord, fstarNum);// + cNorm;
+// Offset distance with noise
+	float cn = noise(cNorm + pNorm, 7, 1.4, 0.7, 0);
+	dist /= cn;
 
-	//fractal noise (can play with these)
-	float n1 = noise(pNorm, 7, 1.4, 0.7, 1) + 0.2; 
+	float alpha = clamp( 1. - pow(dist, 0.3), 0.0, 1.0);
 
-	// // spots
-	float s = 0.1;
-	float frequency = 0.9;//
-	float threshold = 0.0001;// limit number of spots
-	float t1 = snoise(pNorm * frequency) - s;
-	float t2 = snoise((pNorm + 30.) * frequency) - s;
-	float ss = (max(t1 * t2, threshold) - threshold) ;
+	fragColor.a *= alpha;
 
-	// Accumulate total noise
-	float n =clamp(n1 - ss + 0.3, 0, 1);
+	fragColor.rgb = vec3(mix(vec3(1.0, 1.0, 1.0), fragColor.rgb, clamp(dist ,0. , 1.)));
 
-
-	fragColor.rgb = vec3(mix(vec3(1.0, 1.0, 1.0), fragColor.rgb, clamp(1.0 - brightness ,0. , 1.)));
-
-	fragColor.rg *= n;
-
-	if (dist > 1){
-		discard;
-	}
+	//fragColor.rgb = vec3(tn);
 
 }
