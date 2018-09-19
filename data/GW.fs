@@ -9,9 +9,8 @@ void main()
 {
     fragColor = vec4(color, 1.);
     fragColor.a *= uv_fade;
-    vec2 fromCenter = texcoord * 2 - vec2(1);
-    float dist = dot(fromCenter,fromCenter);
-	fragColor.a *= exp(-0.5*dist/0.1);
+
+	//fragColor.a *= exp(-0.5*dist/0.1);
     //fragColor.a *= smoothstep(-1.5, -0.5, -length(fwidth(texcoord.xy)));
     //fragColor.a *= pow(max(0, 1 - dot(fromCenter, fromCenter)), 2);
 }
