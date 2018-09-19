@@ -13,7 +13,8 @@ uniform float NSrad;
 
 
 out vec2 texcoord;
-out vec3 color;
+out vec4 color;
+out float fstarNum;
 
 const float PI = 3.141592653589793;
 const float Grav = 132712440000.0; //km**3 / (s**2 solMass)
@@ -100,13 +101,13 @@ void drawSprite(vec4 position, float radius, float rotation)
 
 void main()
 {
-
-	color = vec3(0);
+	fstarNum = starNum;
+	color = vec4(0);
 	vec3 xb = vec3(gl_in[0].gl_Position.x, gl_in[0].gl_Position.y, gl_in[0].gl_Position.z); //and it is also apparently necessary to access the data??
 
 	if (eventTime <= 0){
 		//NS
-		color = vec3(0.,0.,1.);
+		color = vec4(0.,0.,1.,1.);
 
 		//initial parameters for the NSs
 		float m1 = 1.8;
