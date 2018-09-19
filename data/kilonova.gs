@@ -10,6 +10,8 @@ uniform float eventTime;
 uniform vec2 pfit;
 uniform float starNum;
 uniform float NSrad;
+uniform float kilonovaRad;
+uniform float kilonovaMaxT;
 
 out vec2 texcoord;
 out vec3 color;
@@ -100,10 +102,8 @@ void drawSprite(vec4 position, float radius, float rotation)
 void main()
 {
 
-	color = vec3(0,0,1.);
+	color = vec3(0);
 	vec3 xb = vec3(gl_in[0].gl_Position.x, gl_in[0].gl_Position.y, gl_in[0].gl_Position.z); //and it is also apparently necessary to access the data??
-
-
 
 	if (eventTime <= 0){
 		//NS
@@ -122,7 +122,16 @@ void main()
 
 		vec4 pos = vec4(NSpos, 1.);
 		drawSprite(pos, NSrad, 0);
-	} 
+	} else {
+		if (starNum <= 1.){
+			//simple explosion for kilonova
+			color = vec3(1,1,0);
+			vec4 pos = vec4(xb, 1.);
+			float rad = kilonovaRad*clamp(1. - abs(kilonovaMaxT - eventTime)/kilonovaMaxT, 0, 1.);
+			drawSprite(pos, rad, 0);
+		}
+
+	}
 
 
 }
