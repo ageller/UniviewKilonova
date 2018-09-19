@@ -8,7 +8,7 @@ uniform float uv_simulationtimeSeconds;
 
 uniform float eventTime;
 uniform float GRBrad;
-
+uniform float GRBspeed;
 
 out vec2 texcoord;
 out vec3 color;
@@ -55,9 +55,11 @@ void main()
 {
 
 	color = vec3(0,1,0);
-	vec3 pos = vec3(gl_in[0].gl_Position.x, gl_in[0].gl_Position.y, gl_in[0].gl_Position.z); //and it is also apparently necessary to access the data??
-
+	vec4 pos = vec4(gl_in[0].gl_Position.x, gl_in[0].gl_Position.y, gl_in[0].gl_Position.z,1.); 
 	if (eventTime > 0){
+		pos[0] += gl_in[1].gl_Position.x*eventTime*GRBspeed;
+		pos[1] += gl_in[1].gl_Position.y*eventTime*GRBspeed;
+		pos[2] += gl_in[1].gl_Position.z*eventTime*GRBspeed;
 
 		drawSprite(pos, GRBrad, 0);
 	} 
