@@ -118,7 +118,8 @@ void main()
 		float zi = 0.;
 
 		float period = periodFunc(eventTime);
-		//vec3 NSpos = getbinxyz(xb, m1, m2, ecc, period, omega, pa, zi, eventTime, starNum);
+		vec3 NSpos1 = getbinxyz(xb, m1, m2, ecc, period, omega, pa, zi, eventTime, 0);
+		vec3 NSpos2 = getbinxyz(xb, m1, m2, ecc, period, omega, pa, zi, eventTime, 1);
 		//color = vec3(clamp(1./period, 0, 1), 0.,0.);
 		color = vec4(vec3(0.5),0.05);
 		vec4 pos = vec4(xb, 1.);

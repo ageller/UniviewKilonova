@@ -11,7 +11,8 @@ uniform vec2 pfit;
 uniform float starNum;
 uniform float NSrad;
 uniform float coronaFac;
-
+uniform float m1;
+uniform float m2;
 
 out vec2 texcoord;
 out vec4 color;
@@ -113,15 +114,13 @@ void main()
 		color = vec4(0.,0.,1.,0.3);
 
 		//initial parameters for the NSs
-		float m1 = 1.8;
-		float m2 = 1.1;
 		float ecc = 0.;
 		float omega = 0.;
 		float pa = 0.;
 		float zi = 0.;
 
 		float period = periodFunc(eventTime);
-		NSpos = getbinxyz(xb, m1, m2, ecc, period, omega, pa, zi, eventTime, starNum);
+		NSpos = getbinxyz(xb, m1, m2, ecc, period, omega, pa, zi, -1.*eventTime, starNum);
 
 		vec4 pos = vec4(NSpos, 1.);
 		drawSprite(pos, coronaFac*NSrad, 0);
