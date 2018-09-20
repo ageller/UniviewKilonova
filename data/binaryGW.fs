@@ -16,5 +16,5 @@ void main(){
 	vec4 color = fillColor;
 	color.rgb = color.rgb * colorHighlight;
 	fragColor = color * uv_fade;
-	fragColor.a = fAlpha;
+	fragColor.a *= fAlpha;
 }

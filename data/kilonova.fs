@@ -1,4 +1,6 @@
 uniform float uv_fade;
+uniform mat4 uv_modelViewInverseMatrix;
+
 uniform sampler2D cmap;
 
 in vec2 texcoord;
@@ -84,7 +86,10 @@ void main()
 	}
 	
 	//noise
-	vec3 pNorm = 10.*vec3(texcoord, fTime*0.3);
+	vec3 cameraPosition = (uv_modelViewInverseMatrix * vec4(0, 0, 0, 1)).xyz;
+
+	vec3 cNorm = normalize(cameraPosition);
+	vec3 pNorm = 10.*vec3(texcoord, fTime*0.3) + cNorm;
 
 	//fractal noise (can play with these)
 	float n1 = noise(pNorm, 7, 3., 0.7, 1); 

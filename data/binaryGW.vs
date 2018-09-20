@@ -42,7 +42,10 @@ void calcDistortion (inout vec3 pos, float w){
     float trigarg = 2*w*(-t+r);
     float kfarg = killFunctionDecay/r;
     float killfactor = exp(-kfarg*kfarg);
-    pos.z = -A*pow(r, -5.)*(cosmag*cos(trigarg)+sinmag*sin(trigarg)) * killfactor;
+	//float amp = clamp((cosmag*cos(trigarg)+sinmag*sin(trigarg)) *pow(r, -5.), -1, 1);
+	float amp = (cosmag*cos(trigarg)+sinmag*sin(trigarg)) *pow(r, -5.);
+
+    pos.z = -A* amp * killfactor;
 
 }
 
