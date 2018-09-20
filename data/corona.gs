@@ -16,6 +16,7 @@ uniform float coronaFac;
 out vec2 texcoord;
 out vec4 color;
 out float fstarNum;
+out vec3 NSpos;
 
 const float PI = 3.141592653589793;
 const float Grav = 132712440000.0; //km**3 / (s**2 solMass)
@@ -120,7 +121,7 @@ void main()
 		float zi = 0.;
 
 		float period = periodFunc(eventTime);
-		vec3 NSpos = getbinxyz(xb, m1, m2, ecc, period, omega, pa, zi, eventTime, starNum);
+		NSpos = getbinxyz(xb, m1, m2, ecc, period, omega, pa, zi, eventTime, starNum);
 
 		vec4 pos = vec4(NSpos, 1.);
 		drawSprite(pos, coronaFac*NSrad, 0);

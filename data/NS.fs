@@ -3,6 +3,7 @@ uniform mat4 uv_modelViewInverseMatrix;
 
 in vec2 texcoord;
 in vec4 color;
+in vec3 NSpos;
 
 in float fstarNum;
 
@@ -79,10 +80,10 @@ void main()
 	vec3 cNorm = normalize(cameraPosition);
 
 	//noise
-	vec3 pNorm = 10.*vec3(texcoord, fstarNum);// + cNorm;
+	vec3 pNorm = 10.*vec3(texcoord, fstarNum) + NSpos;
 
 	//fractal noise (can play with these)
-	float n1 = noise(pNorm, 7, 1.4, 0.7, 1) + 0.2; 
+	float n1 = noise(pNorm, 7, 1.4, 0.7, 1); 
 
 	// // spots
 	float s = 0.1;
@@ -95,10 +96,10 @@ void main()
 	// Accumulate total noise
 	float n =clamp(n1 - ss + 0.3, 0, 1);
 
+	fragColor.rg += 0.5*n;
 
 	fragColor.rgb = vec3(mix(vec3(1.0, 1.0, 1.0), fragColor.rgb, clamp(1.0 - brightness ,0. , 1.)));
 
-	fragColor.rg *= n;
 
 	if (dist > 1){
 		discard;

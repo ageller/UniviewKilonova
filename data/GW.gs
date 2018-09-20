@@ -120,7 +120,7 @@ void main()
 		float period = periodFunc(eventTime);
 		//vec3 NSpos = getbinxyz(xb, m1, m2, ecc, period, omega, pa, zi, eventTime, starNum);
 		//color = vec3(clamp(1./period, 0, 1), 0.,0.);
-		color = vec4(1,0,0,0.2);
+		color = vec4(vec3(0.5),0.05);
 		vec4 pos = vec4(xb, 1.);
 		drawXYplane(pos, GWrad);
 	} 

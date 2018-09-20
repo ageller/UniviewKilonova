@@ -56,7 +56,7 @@ void main()
 {
 
 	float alpha = clamp((GRBMaxT - eventTime)/GRBMaxT, 0, 1.);
-	color = vec4(0,1,0, alpha);
+	color = vec4(1,1,0.3, alpha);
 	vec4 pos = vec4(gl_in[0].gl_Position.x, gl_in[0].gl_Position.y, gl_in[0].gl_Position.z,1.); 
 	if (eventTime > 0){
 		pos[0] += gl_in[1].gl_Position.x*eventTime*GRBspeed;

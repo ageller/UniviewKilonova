@@ -13,6 +13,7 @@ uniform float NSrad;
 
 
 out vec2 texcoord;
+out vec3 NSpos;
 out vec4 color;
 out float fstarNum;
 
@@ -118,7 +119,7 @@ void main()
 		float zi = 0.;
 
 		float period = periodFunc(eventTime);
-		vec3 NSpos = getbinxyz(xb, m1, m2, ecc, period, omega, pa, zi, eventTime, starNum);
+		NSpos = getbinxyz(xb, m1, m2, ecc, period, omega, pa, zi, eventTime, starNum);
 
 		vec4 pos = vec4(NSpos, 1.);
 		drawSprite(pos, NSrad, 0);

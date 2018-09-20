@@ -3,6 +3,7 @@ uniform mat4 uv_modelViewInverseMatrix;
 
 in vec2 texcoord;
 in vec4 color;
+in vec3 NSpos;
 
 in float fstarNum;
 out vec4 fragColor;
@@ -79,10 +80,10 @@ void main()
 	vec3 cameraPosition = (uv_modelViewInverseMatrix * vec4(0, 0, 0, 1)).xyz;
 
 	vec3 cNorm = normalize(cameraPosition);
-	vec3 pNorm = vec3(angle, 0., fstarNum);
+	vec3 pNorm = vec3(angle, 0., fstarNum) + cNorm;// + NSpos;
 
 // Offset distance with noise
-	float cn = noise(cNorm + pNorm, 7, 1.4, 0.7, 0);
+	float cn = noise(pNorm, 7, 1.4, 0.7, 0);
 	dist /= cn;
 
 	float alpha = clamp( 1. - pow(dist, 0.3), 0.0, 1.0);

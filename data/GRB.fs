@@ -14,7 +14,7 @@ void main()
     if (dist > 1){
     	discard;
     }
-	fragColor.a *= exp(-0.5*dist/0.1);
+	fragColor.a *= exp(-5.*dist);
     //fragColor.a *= smoothstep(-1.5, -0.5, -length(fwidth(texcoord.xy)));
     //fragColor.a *= pow(max(0, 1 - dot(fromCenter, fromCenter)), 2);
 }

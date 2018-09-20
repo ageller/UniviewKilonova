@@ -12,6 +12,8 @@ uniform float kilonovaMaxT;
 
 out vec2 texcoord;
 out vec3 color;
+out float fTime;
+out float fMaxT;
 
 // axis should be normalized
 mat3 rotationMatrix(vec3 axis, float angle)
@@ -53,6 +55,9 @@ void drawSprite(vec4 position, float radius, float rotation)
 void main()
 {
 
+	fTime = eventTime;
+	fMaxT = kilonovaMaxT;
+	
 	color = vec3(0);
 	vec3 xb = vec3(gl_in[0].gl_Position.x, gl_in[0].gl_Position.y, gl_in[0].gl_Position.z); //and it is also apparently necessary to access the data??
 
@@ -61,7 +66,7 @@ void main()
 		//simple explosion for kilonova
 		color = vec3(1,1,0);
 		vec4 pos = vec4(xb, 1.);
-		float rad = kilonovaRad*clamp(1. - abs(kilonovaMaxT - eventTime)/kilonovaMaxT, 0, 1.);
+		float rad = kilonovaRad*clamp(1. - (kilonovaMaxT - eventTime)/kilonovaMaxT, 0, 1.);
 		drawSprite(pos, rad, 0);
 		
 	}
