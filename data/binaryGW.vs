@@ -39,11 +39,11 @@ void calcDistortion (inout vec3 pos, float w){
     float w2 = w*w;
     float cosmag = -3.*x2 + 4.*w2*x2*x2 + 3.*y2 - 4.*w2*y2*y2 + 12.*w*x*y*r;
     float sinmag = 2*(4*w2*x2*x*y - 3*w*x2*r + 3*w*y2*r + x*y*(-3+4*w2*y2));
-    float trigarg = 2*w*(-t+r);
+    float trigarg = 2.*w*(-t + r)*0.5; //added factor to spread out the waves
     float kfarg = killFunctionDecay/r;
     float killfactor = exp(-kfarg*kfarg);
 	//float amp = clamp((cosmag*cos(trigarg)+sinmag*sin(trigarg)) *pow(r, -5.), -1, 1);
-	float amp = (cosmag*cos(trigarg)+sinmag*sin(trigarg)) *pow(r, -5.);
+	float amp = (cosmag*cos(trigarg)+ sinmag*sin(trigarg)) *pow(r, -5.);
 
     pos.z = -A* amp * killfactor;
 
@@ -52,9 +52,15 @@ void calcDistortion (inout vec3 pos, float w){
 void main(){
 	//this calculate the appropreate coorodinates of points on the grid and makes sure the edges of the membrane remain flat.
 	vec3 vertexPosition = uv_vertexAttrib*gridScale;
-	
-	float period = periodFunc(eventTime)*86400./5.;
-	float w = 2.*PI/period; //angular frequency (rad/day) of the binary system
+	float dist = length(uv_vertexAttrib.xy);
+	float pMin = 10.; // min value so we don't get a zero period
+	float period = pMin;
+	float offset = -0.02;
+	float tval = offset * dist + eventTime;
+	//float tval = eventTime*(1. + pow(dist, 2.));
+	period = max(periodFunc(tval)*86400., pMin); //changing with radius from center (by eye) 
+
+	float w = 2.*PI/period * 5.; //angular frequency (rad/day) of the binary system, factor of 5 to try to match the NSs (by eye) 
 	calcDistortion(vertexPosition, w);
 	falloffFactor = min(1.0-(length(uv_vertexAttrib.xy)-0.8)/0.15,1.);
 	vertexPosition.z *= falloffFactor;
