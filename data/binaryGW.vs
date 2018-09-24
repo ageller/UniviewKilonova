@@ -42,8 +42,8 @@ void calcDistortion (inout vec3 pos, float w){
     float trigarg = 2.*w*(-t + r)*0.5; //added factor to spread out the waves
     float kfarg = killFunctionDecay/r;
     float killfactor = exp(-kfarg*kfarg);
-	//float amp = clamp((cosmag*cos(trigarg)+sinmag*sin(trigarg)) *pow(r, -5.), -1, 1);
-	float amp = (cosmag*cos(trigarg)+ sinmag*sin(trigarg)) *pow(r, -5.);
+	float amp = clamp((cosmag*cos(trigarg)+sinmag*sin(trigarg)) *pow(r, -5.), -1, 1);
+	//float amp = (cosmag*cos(trigarg)+ sinmag*sin(trigarg)) *pow(r, -5.);
 
     pos.z = -A* amp * killfactor;
 
@@ -53,13 +53,17 @@ void main(){
 	//this calculate the appropreate coorodinates of points on the grid and makes sure the edges of the membrane remain flat.
 	vec3 vertexPosition = uv_vertexAttrib*gridScale;
 	float dist = length(uv_vertexAttrib.xy);
-	float pMin = 10.; // min value so we don't get a zero period
+	float pMin = 100.; // min value so we don't get a zero period
 	float period = pMin;
-	float offset = -0.02;
+	float offset = -0.1;
 	float tval = offset * dist + eventTime;
 	//float tval = eventTime*(1. + pow(dist, 2.));
 	period = max(periodFunc(tval)*86400., pMin); //changing with radius from center (by eye) 
-
+	fAlpha = 1.;
+	if (period <= pMin){ //trying to get a flat plane after merger
+		period = 1e10;
+		fAlpha = 0.;
+	}
 	float w = 2.*PI/period * 5.; //angular frequency (rad/day) of the binary system, factor of 5 to try to match the NSs (by eye) 
 	calcDistortion(vertexPosition, w);
 	falloffFactor = min(1.0-(length(uv_vertexAttrib.xy)-0.8)/0.15,1.);
@@ -76,7 +80,7 @@ void main(){
 	
 	//Throw away points that are too close to or too far from the center and fade the others to create a halo effect
 	//fAlpha = min((.95-r)/.2+1,1.);
-	fAlpha = clamp(1. - r, 0., 1.);
+	fAlpha *= clamp(0.5 - r, 0., 1.) ;
 
 	
 }
