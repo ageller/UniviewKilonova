@@ -55,7 +55,7 @@ void main(){
 	float dist = length(uv_vertexAttrib.xy);
 	float pMin = 100.; // min value so we don't get a zero period
 	float period = pMin;
-	float offset = -0.1;
+	float offset = -0.2;
 	float tval = offset * dist + eventTime;
 	//float tval = eventTime*(1. + pow(dist, 2.));
 	period = max(periodFunc(tval)*86400., pMin); //changing with radius from center (by eye) 
