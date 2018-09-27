@@ -12,6 +12,7 @@ uniform float killFunctionDecay;
 
 uniform float eventTime;
 uniform vec2 pfit;
+uniform float GWAmpClamp;
 
 out float falloffFactor;
 out float colorHighlight;
@@ -42,10 +43,11 @@ void calcDistortion (inout vec3 pos, float w){
     float trigarg = 2.*w*(-t + r)*0.5; //added factor to spread out the waves
     float kfarg = killFunctionDecay/r;
     float killfactor = exp(-kfarg*kfarg);
-	float amp = clamp((cosmag*cos(trigarg)+sinmag*sin(trigarg)) *pow(r, -5.), -1, 1);
-	//float amp = (cosmag*cos(trigarg)+ sinmag*sin(trigarg)) *pow(r, -5.);
+	//float amp = clamp((cosmag*cos(trigarg)+sinmag*sin(trigarg)) *pow(r, -5.), -1, 1);
+	float amp = (cosmag*cos(trigarg)+ sinmag*sin(trigarg)) *pow(r, -5.);
 
-    pos.z = -A* amp * killfactor;
+    //pos.z = -A* amp * killfactor;
+    pos.z = clamp(-A* amp, -GWAmpClamp, GWAmpClamp)*killfactor;
 
 }
 
