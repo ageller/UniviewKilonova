@@ -5,12 +5,14 @@ uniform float uv_simulationtimeSeconds;
 uniform int uv_simulationtimeDays;
 uniform vec4 uv_cameraPos;
 
+uniform sampler2D stateTexture;
+
 uniform float gridScale;
 uniform float shadingFactor;
 uniform float A;
 uniform float killFunctionDecay; 
 
-uniform float eventTime;
+//uniform float eventTime;
 uniform vec2 pfit;
 uniform float GWAmpClamp;
 
@@ -26,7 +28,7 @@ float periodFunc(float t)
 	return pow(-1.*pfit[0]*t, pfit[1]);
 }
 
-void calcDistortion (inout vec3 pos, float w){
+void calcDistortion (inout vec3 pos, float w, float eventTime){
 	
     //The equation to calculate the Ricci Scalar Curvature of a binary system is courtesy of Shane L. Larson
 	//float t = uv_simulationtimeDays+uv_simulationtimeSeconds/(3600.*24.);
@@ -52,6 +54,9 @@ void calcDistortion (inout vec3 pos, float w){
 }
 
 void main(){
+
+	float eventTime = texture(stateTexture, vec2(0.5)).r;
+	
 	//this calculate the appropreate coorodinates of points on the grid and makes sure the edges of the membrane remain flat.
 	vec3 vertexPosition = uv_vertexAttrib*gridScale;
 	float dist = length(uv_vertexAttrib.xy);
@@ -67,7 +72,7 @@ void main(){
 		fAlpha = 0.;
 	}
 	float w = 2.*PI/period * 5.; //angular frequency (rad/day) of the binary system, factor of 5 to try to match the NSs (by eye) 
-	calcDistortion(vertexPosition, w);
+	calcDistortion(vertexPosition, w, eventTime);
 	falloffFactor = min(1.0-(length(uv_vertexAttrib.xy)-0.8)/0.15,1.);
 	vertexPosition.z *= falloffFactor;
 	

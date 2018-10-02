@@ -6,7 +6,9 @@ uniform mat4 uv_modelViewInverseMatrix;
 uniform int uv_simulationtimeDays;
 uniform float uv_simulationtimeSeconds;
 
-uniform float eventTime;
+uniform sampler2D stateTexture;
+
+//uniform float eventTime;
 uniform vec2 pfit;
 uniform float starNum;
 uniform float NSrad;
@@ -103,6 +105,8 @@ void drawSprite(vec4 position, float radius, float rotation)
 
 void main()
 {
+	float eventTime = texture(stateTexture, vec2(0.5)).r;
+
 	fstarNum = starNum;
 	color = vec4(0);
 	vec3 xb = vec3(gl_in[0].gl_Position.x, gl_in[0].gl_Position.y, gl_in[0].gl_Position.z); //and it is also apparently necessary to access the data??

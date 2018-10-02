@@ -6,7 +6,9 @@ uniform mat4 uv_modelViewInverseMatrix;
 uniform int uv_simulationtimeDays;
 uniform float uv_simulationtimeSeconds;
 
-uniform float eventTime;
+uniform sampler2D stateTexture;
+
+//uniform float eventTime;
 uniform float GRBrad;
 uniform float GRBspeed;
 uniform float GRBMaxT;
@@ -54,6 +56,7 @@ void drawSprite(vec4 position, float radius, float rotation)
 
 void main()
 {
+	float eventTime = texture(stateTexture, vec2(0.5)).r;
 
 	float alpha = clamp((GRBMaxT - eventTime)/GRBMaxT, 0, 1.);
 	color = vec4(1,1,0.3, alpha);
