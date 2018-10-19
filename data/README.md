@@ -1,4 +1,2 @@
-cat grid512.obj | grep -v vt | grep -v vn | sed s/"\/"/" "/g | awk '{if ($1 == "f"){print $1,$2,$4,$6,$8}else{print $0}}' > grid512.v2.obj
-
-and remove the top lines 
+cat grid512.obj | sed s/"\/"/" "/g | awk '{if (NR > 4){if ($1 == "f"){print $1,$2,$4,$6,$8}else{print $0}}}' > grid512.v2.obj
 
